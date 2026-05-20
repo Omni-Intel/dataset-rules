@@ -2,15 +2,32 @@
 
 Use this checklist before accepting a dataset into the platform.
 
+Validation MUST run on the local processing server against the final dataset directory before upload. Object storage upload MUST NOT start unless every required check passes.
+
+If any required check fails, the dataset MUST be rejected for upload. Any change to files after validation MUST trigger a new validation run.
+
+Unless an item is explicitly marked optional or recommended, every checklist item is required and blocking.
+
+## Upload gate
+
+- [ ] Validation is run against the exact dataset directory intended for upload.
+- [ ] `dataset_id` and `dataset.version` in `metadata.toml` match the upload target.
+- [ ] No files are modified after validation and before upload.
+- [ ] All required checks in this checklist pass.
+- [ ] A validation result is recorded with pass/fail status, dataset ID, dataset version, row count, and failed checks if any.
+
 ## File existence
 
 - [ ] `dataset.lance/` exists.
+- [ ] `dataset.lance/` can be opened as a Lance dataset.
+- [ ] `dataset.lance/` contains at least one row.
 - [ ] `metadata.toml` exists.
 - [ ] `versions.toml` exists or the dataset is explicitly marked as not version-tracked.
 - [ ] `description.toml` is optional.
 
 ## Metadata checks
 
+- [ ] `metadata.toml` is valid TOML and can be parsed without errors.
 - [ ] `spec_version` exists.
 - [ ] `[dataset]` exists.
 - [ ] `[storage]` exists.
@@ -30,6 +47,8 @@ Use this checklist before accepting a dataset into the platform.
 - [ ] `dataset.updated_at` exists.
 - [ ] `dataset.sample_unit` exists.
 - [ ] `dataset.n_samples` exists.
+- [ ] `dataset.n_samples` is positive.
+- [ ] Lance row count equals `dataset.n_samples`.
 
 ## Storage section
 
@@ -40,16 +59,23 @@ Use this checklist before accepting a dataset into the platform.
 
 ## Lance schema checks
 
+- [ ] Every required base column exists: `sample_id`, `subject_id`, `modality`, `data`, `shape`, `original_shape`, `valid_length`, and `qc_pass`.
+- [ ] Required base columns contain no null values.
 - [ ] All Lance columns are declared in `[[schema.columns]]`.
 - [ ] All declared required columns exist in Lance.
 - [ ] Types in `metadata.toml` match Lance schema.
-- [ ] `sample_id` is unique.
-- [ ] `qc_pass` is boolean.
-- [ ] `shape`, `original_shape`, and `valid_length` exist.
+- [ ] `sample_id` values are non-empty and unique.
+- [ ] `subject_id` values are non-empty.
+- [ ] `modality` values match `dataset.modality`.
+- [ ] `qc_pass` is boolean and non-null for every row.
 
 ## Data restoration checks
 
-- [ ] `data` can be reshaped to `shape` for sampled rows.
+- [ ] `data` values are present and non-empty for every row.
+- [ ] `shape` and `original_shape` contain positive integer dimensions.
+- [ ] `data` length matches the product of `shape`.
+- [ ] `valid_length` is positive and does not exceed the product of `shape`.
+- [ ] `data` can be reshaped to `shape` for every row.
 - [ ] `original_shape` can be used to crop or slice the padded array.
 - [ ] `valid_length` matches the product of `original_shape`, unless explicitly declared otherwise.
 - [ ] `axis_order` length matches shape rank.
@@ -57,9 +83,15 @@ Use this checklist before accepting a dataset into the platform.
 ## Label checks
 
 - [ ] Supervised datasets contain `[label]`.
+- [ ] Supervised datasets contain a `label` column.
+- [ ] Supervised datasets have non-null `label` values for every released row.
 - [ ] Classification datasets contain `[[label.classes]]`.
 - [ ] `label` values are valid class IDs for classification tasks.
 - [ ] `label_name` matches `label.classes`, if present.
+
+## Split checks
+
+- [ ] If `split` is present, every value is declared in metadata or uses an accepted platform split value.
 
 ## EEG checks
 
@@ -85,3 +117,10 @@ Use this checklist before accepting a dataset into the platform.
 - [ ] `fmri.time_axis` is valid.
 - [ ] Preprocessing status fields exist.
 
+## Pre-upload object storage checks
+
+- [ ] The upload payload contains the validated `dataset.lance/`, `metadata.toml`, and `versions.toml` unless version tracking is explicitly disabled.
+- [ ] Relative paths in TOML files resolve inside the dataset directory.
+- [ ] Absolute local paths are not used in uploaded metadata unless explicitly allowed by platform policy.
+- [ ] Object storage destination is derived from `dataset_id` and `dataset.version`.
+- [ ] Upload is blocked when validation status is not `pass`.
