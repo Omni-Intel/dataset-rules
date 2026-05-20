@@ -1,0 +1,113 @@
+spec_version = "0.1.0"
+
+[dataset]
+dataset_id = "ds-example"
+name = "Example Dataset"
+modality = "eeg"
+version = "2026.05.20"
+created_at = "2026-05-20T10:00:00+08:00"
+updated_at = "2026-05-20T10:00:00+08:00"
+sample_unit = "window"
+task_type = "classification"
+n_samples = 0
+n_subjects = 0
+
+[storage]
+table_name = "dataset.lance"
+lance_path = "dataset.lance"
+path_type = "relative"
+root_path = "."
+backend = "local"
+uri = ""
+
+[schema]
+primary_key = "sample_id"
+data_column = "data"
+label_column = "label"
+
+[[schema.columns]]
+name = "sample_id"
+type = "string"
+required = true
+nullable = false
+description = "Unique sample identifier."
+
+[[schema.columns]]
+name = "subject_id"
+type = "string"
+required = true
+nullable = false
+description = "Subject identifier."
+
+[[schema.columns]]
+name = "modality"
+type = "string"
+required = true
+nullable = false
+allowed_values = ["eeg", "mri", "fmri"]
+description = "Data modality."
+
+[[schema.columns]]
+name = "data"
+type = "fixed_size_list<float32>"
+required = true
+nullable = false
+description = "Flattened padded neuroimaging data."
+
+[[schema.columns]]
+name = "shape"
+type = "list<int32>"
+required = true
+nullable = false
+description = "Padded data shape."
+
+[[schema.columns]]
+name = "original_shape"
+type = "list<int32>"
+required = true
+nullable = false
+description = "Original data shape before padding."
+
+[[schema.columns]]
+name = "valid_length"
+type = "int64"
+required = true
+nullable = false
+description = "Number of valid values before padding."
+
+[[schema.columns]]
+name = "qc_pass"
+type = "bool"
+required = true
+nullable = false
+description = "Whether the sample passed quality control."
+
+[data]
+array_column = "data"
+dtype = "float32"
+axis_order = ["channel", "time"]
+padding = true
+padding_value = 0.0
+shape_column = "shape"
+original_shape_column = "original_shape"
+valid_length_column = "valid_length"
+
+[quality_control]
+qc_column = "qc_pass"
+qc_pass_values = [true, false]
+
+[label]
+label_column = "label"
+label_name_column = "label_name"
+task_type = "classification"
+num_classes = 2
+
+[[label.classes]]
+id = 0
+name = "class_0"
+description = "Class 0."
+
+[[label.classes]]
+id = 1
+name = "class_1"
+description = "Class 1."

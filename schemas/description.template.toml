@@ -1,0 +1,26 @@
+[overview]
+title = "Example Dataset"
+summary = "Short human-readable dataset summary."
+modality = "eeg"
+task = "classification"
+
+[collection]
+source = "unknown"
+population = "unknown"
+collection_period = "unknown"
+institution = "unknown"
+
+[processing_summary]
+description = "Describe major conversion and preprocessing steps."
+normalization = "none"
+label_mapping = "unknown"
+
+[intended_use]
+tasks = ["classification"]
+recommended_split = "Use the split column in dataset.lance."
+
+[limitations]
+notes = ["Unknown limitations."]
+
+[citation]
+text = "Please cite the original dataset and this converted release."

@@ -1,0 +1,146 @@
+spec_version = "0.1.0"
+
+[dataset]
+dataset_id = "ds-example-fmri"
+name = "Example fMRI Dataset"
+modality = "fmri"
+version = "2026.05.20"
+created_at = "2026-05-20T10:00:00+08:00"
+updated_at = "2026-05-20T10:00:00+08:00"
+sample_unit = "window"
+task_type = "classification"
+n_samples = 1000
+n_subjects = 100
+
+[storage]
+table_name = "dataset.lance"
+lance_path = "dataset.lance"
+path_type = "relative"
+root_path = "."
+backend = "local"
+uri = ""
+
+[schema]
+primary_key = "sample_id"
+data_column = "data"
+label_column = "label"
+
+[[schema.columns]]
+name = "sample_id"
+type = "string"
+required = true
+nullable = false
+description = "Unique sample identifier."
+
+[[schema.columns]]
+name = "subject_id"
+type = "string"
+required = true
+nullable = false
+description = "Subject identifier."
+
+[[schema.columns]]
+name = "modality"
+type = "string"
+required = true
+nullable = false
+allowed_values = ["fmri"]
+description = "Data modality."
+
+[[schema.columns]]
+name = "data"
+type = "fixed_size_list<float32>"
+required = true
+nullable = false
+description = "Flattened padded fMRI data."
+
+[[schema.columns]]
+name = "shape"
+type = "list<int32>"
+required = true
+nullable = false
+description = "Padded fMRI shape."
+
+[[schema.columns]]
+name = "original_shape"
+type = "list<int32>"
+required = true
+nullable = false
+description = "Original fMRI shape before padding."
+
+[[schema.columns]]
+name = "valid_length"
+type = "int64"
+required = true
+nullable = false
+description = "Valid flattened length before padding."
+
+[[schema.columns]]
+name = "affine"
+type = "fixed_size_list<float32>[16]"
+required = false
+nullable = true
+description = "Flattened 4x4 affine matrix."
+
+[[schema.columns]]
+name = "tr"
+type = "float32"
+required = false
+nullable = true
+description = "Repetition time in seconds."
+
+[[schema.columns]]
+name = "qc_pass"
+type = "bool"
+required = true
+nullable = false
+description = "Quality control flag."
+
+[data]
+array_column = "data"
+dtype = "float32"
+axis_order = ["x", "y", "z", "time"]
+padding = true
+padding_value = 0.0
+shape_column = "shape"
+original_shape_column = "original_shape"
+valid_length_column = "valid_length"
+
+[fmri]
+bold_type = "BOLD"
+tr = 2.0
+tr_unit = "s"
+space = "MNI152"
+voxel_size = [2.0, 2.0, 2.0]
+voxel_size_unit = "mm"
+spatial_axes = ["x", "y", "z"]
+time_axis = 3
+slice_timing_corrected = true
+motion_corrected = true
+normalized = true
+smoothed = false
+smoothing_fwhm = 0.0
+
+[label]
+label_column = "label"
+label_name_column = "label_name"
+task_type = "classification"
+num_classes = 2
+
+[[label.classes]]
+id = 0
+name = "control"
+description = "Control group."
+
+[[label.classes]]
+id = 1
+name = "case"
+description = "Case group."
+
+[quality_control]
+qc_column = "qc_pass"
+qc_pass_values = [true, false]
+
+[split]
+split_column = "split"
+allowed_values = ["train", "val", "test"]

@@ -1,0 +1,19 @@
+spec_version = "0.1.0"
+dataset_id = "ds-example"
+table = "dataset.lance"
+
+[current]
+lance_version = 1
+dataset_version = "2026.05.20"
+description = "Current validated release."
+
+[[versions]]
+lance_version = 1
+dataset_version = "2026.05.20"
+created_at = "2026-05-20T10:00:00+08:00"
+author = "system"
+change_type = "initial_import"
+compatible_with_previous = false
+description = "Initial conversion to Lance format."
+affected_rows = 0
+affected_columns = ["sample_id", "subject_id", "data", "shape", "original_shape", "valid_length", "qc_pass"]
