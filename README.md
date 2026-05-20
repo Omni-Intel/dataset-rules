@@ -29,14 +29,25 @@ The specification is designed for EEG, MRI, fMRI, and future multimodal datasets
 | `versions.toml` | Recommended | Lance version changelog |
 | `description.toml` | No | Human-readable dataset overview and processing notes |
 
+## Rules navigation
+
+| Topic | English | Chinese |
+|---|---|---|
+| Dataset layout | [dataset-layout-rules.md](rules/dataset-layout-rules.md) | [dataset-layout-rules.cn.md](rules/dataset-layout-rules.cn.md) |
+| Lance table | [lance-rules.md](rules/lance-rules.md) | [lance-rules.cn.md](rules/lance-rules.cn.md) |
+| Metadata | [metadata-rules.md](rules/metadata-rules.md) | [metadata-rules.cn.md](rules/metadata-rules.cn.md) |
+| Versioning | [version-rules.md](rules/version-rules.md) | [version-rules.cn.md](rules/version-rules.cn.md) |
+| Description | [description-rules.md](rules/description-rules.md) | [description-rules.cn.md](rules/description-rules.cn.md) |
+| Validation checklist | [validation-checklist.md](validation/validation-checklist.md) | - |
+
 ## Recommended reading order
 
-1. `rules/dataset-layout-rules.md`
-2. `rules/lance-rules.md`
-3. `rules/metadata-rules.md`
-4. `rules/version-rules.md`
-5. `rules/description-rules.md`
-6. `validation/validation-checklist.md`
+1. [Dataset layout rules](rules/dataset-layout-rules.md) / [中文](rules/dataset-layout-rules.cn.md)
+2. [Lance table rules](rules/lance-rules.md) / [中文](rules/lance-rules.cn.md)
+3. [Metadata rules](rules/metadata-rules.md) / [中文](rules/metadata-rules.cn.md)
+4. [Version rules](rules/version-rules.md) / [中文](rules/version-rules.cn.md)
+5. [Description rules](rules/description-rules.md) / [中文](rules/description-rules.cn.md)
+6. [Validation checklist](validation/validation-checklist.md)
 
 ## Current default schema
 
@@ -100,4 +111,3 @@ When changing this specification:
 3. Update `validation/validation-checklist.md` if validation behavior changes.
 4. Update `CHANGELOG.md` with a concise description.
 5. Keep backward compatibility unless the change is explicitly marked as breaking.
-
