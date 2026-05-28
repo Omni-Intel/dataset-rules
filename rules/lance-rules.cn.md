@@ -94,7 +94,18 @@ split
 start_time: float64
 duration: float64
 start_sample: int64
+channel_names: list<string>
+channel_status: list<string>
+channel_mask: list<bool>
 ```
+
+对于可变 EEG 通道布局，`metadata.toml` MUST 声明读取哪些通道列。存在这些列时：
+
+- `channel_names` MUST 按恢复后数据通道轴使用的顺序存储通道名称。
+- `channel_status` MUST 与 `channel_names` 对齐。
+- `channel_mask` 如果存在数据集级通道全集，MUST 与该全集对齐；否则 MUST 与 `channel_names` 对齐。
+
+对于 `channel_layout = "per_subject"`，被试级通道元数据 SHOULD 在该被试的每个样本行中重复存储。
 
 ### MRI 可选列
 

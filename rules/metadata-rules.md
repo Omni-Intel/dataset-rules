@@ -196,7 +196,7 @@ When `dataset.modality = "eeg"`, `[eeg]` MUST contain:
 
 | Field | Type | Required | Description |
 |---|---|---:|---|
-| `n_channels` | int | Yes | Number of channels |
+| `n_channels` | int | Yes | Fixed channel count for `dataset_level`, or maximum restored channel count for variable layouts |
 | `sampling_rate` | float | Yes | Sampling rate |
 | `sampling_rate_unit` | string | Yes | Usually `Hz` |
 | `unit` | string | Yes | Signal unit, e.g. `uV` |
@@ -204,10 +204,38 @@ When `dataset.modality = "eeg"`, `[eeg]` MUST contain:
 | `montage` | string | Yes | Electrode montage |
 | `channel_axis` | int | Yes | Channel axis after restoration |
 | `time_axis` | int | Yes | Time axis after restoration |
+| `channel_layout` | string | Yes | `dataset_level`, `per_subject`, or `per_sample` |
 
-It MUST include `[[eeg.channels]]` entries for every channel.
+`channel_layout` defines how channel names and order are resolved:
 
-Each channel MUST contain:
+| Value | Meaning |
+|---|---|
+| `dataset_level` | Every EEG row uses the dataset-level `[[eeg.channels]]` order. |
+| `per_subject` | Channel names and order MAY differ by subject and MUST be stored in Lance. Rows from the same subject SHOULD use the same channel metadata. |
+| `per_sample` | Channel names and order MAY differ by sample and MUST be stored in Lance. |
+
+When `channel_layout = "dataset_level"`, `[eeg]` MUST include `[[eeg.channels]]` entries for every channel, and `eeg.n_channels` MUST equal the number of entries.
+
+When `channel_layout = "per_subject"` or `"per_sample"`, `[eeg]` MUST declare:
+
+```toml
+channel_names_column = "channel_names"
+```
+
+The named Lance column MUST contain channel names in the same order as the restored data channel axis after applying `original_shape`. `eeg.n_channels` MUST be greater than or equal to every row's restored channel-axis length. `[[eeg.channels]]` MAY declare the canonical channel universe when one exists.
+
+It MAY also declare:
+
+```toml
+channel_status_column = "channel_status"
+channel_mask_column = "channel_mask"
+```
+
+`channel_status_column`, when present, MUST reference a Lance column aligned with `channel_names_column`. Accepted status values SHOULD be `good`, `bad`, `missing`, `interpolated`, `padded`, or `unknown`.
+
+`channel_mask_column`, when present, MUST reference a Lance column aligned with the dataset-level channel universe if `[[eeg.channels]]` is declared, otherwise aligned with `channel_names_column`.
+
+Each `[[eeg.channels]]` entry MUST contain:
 
 | Field | Type | Required | Description |
 |---|---|---:|---|
@@ -276,4 +304,3 @@ When `dataset.modality = "fmri"`, `[fmri]` MUST contain:
 | `slice_timing_corrected` | bool | Yes | Whether slice timing correction was applied |
 | `motion_corrected` | bool | Yes | Whether motion correction was applied |
 | `normalized` | bool | Yes | Whether normalized to a template space |
-

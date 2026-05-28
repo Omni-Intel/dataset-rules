@@ -196,7 +196,7 @@ qc_method = "..."
 
 | Field | Type | Required | Description |
 |---|---|---:|---|
-| `n_channels` | int | Yes | 通道数量 |
+| `n_channels` | int | Yes | `dataset_level` 的固定通道数，或可变布局中的最大恢复通道数 |
 | `sampling_rate` | float | Yes | 采样率 |
 | `sampling_rate_unit` | string | Yes | 通常为 `Hz` |
 | `unit` | string | Yes | 信号单位，例如 `uV` |
@@ -204,10 +204,38 @@ qc_method = "..."
 | `montage` | string | Yes | 电极 montage |
 | `channel_axis` | int | Yes | 恢复后的通道轴 |
 | `time_axis` | int | Yes | 恢复后的时间轴 |
+| `channel_layout` | string | Yes | `dataset_level`、`per_subject` 或 `per_sample` |
 
-它 MUST 为每个通道包含 `[[eeg.channels]]` 条目。
+`channel_layout` 定义如何解析通道名称和顺序：
 
-每个通道 MUST 包含：
+| Value | Meaning |
+|---|---|
+| `dataset_level` | 每个 EEG 行都使用数据集级 `[[eeg.channels]]` 顺序。 |
+| `per_subject` | 通道名称和顺序 MAY 按被试变化，并且 MUST 存储在 Lance 中。同一被试的行 SHOULD 使用相同的通道元数据。 |
+| `per_sample` | 通道名称和顺序 MAY 按样本变化，并且 MUST 存储在 Lance 中。 |
+
+当 `channel_layout = "dataset_level"` 时，`[eeg]` MUST 为每个通道包含 `[[eeg.channels]]` 条目，并且 `eeg.n_channels` MUST 等于条目数量。
+
+当 `channel_layout = "per_subject"` 或 `"per_sample"` 时，`[eeg]` MUST 声明：
+
+```toml
+channel_names_column = "channel_names"
+```
+
+被引用的 Lance 列 MUST 按应用 `original_shape` 后恢复数据的通道轴顺序存储通道名称。`eeg.n_channels` MUST 大于或等于每一行恢复后的通道轴长度。如果存在标准通道全集，`[[eeg.channels]]` MAY 声明该全集。
+
+它还 MAY 声明：
+
+```toml
+channel_status_column = "channel_status"
+channel_mask_column = "channel_mask"
+```
+
+`channel_status_column` 存在时，MUST 指向与 `channel_names_column` 对齐的 Lance 列。状态值 SHOULD 使用 `good`、`bad`、`missing`、`interpolated`、`padded` 或 `unknown`。
+
+`channel_mask_column` 存在时，如果声明了 `[[eeg.channels]]`，MUST 与数据集级通道全集对齐；否则 MUST 与 `channel_names_column` 对齐。
+
+每个 `[[eeg.channels]]` 条目 MUST 包含：
 
 | Field | Type | Required | Description |
 |---|---|---:|---|

@@ -76,7 +76,7 @@ split: string
 
 ## Modality-specific metadata
 
-For EEG datasets, `metadata.toml` must describe channels, channel types, channel order, channel count, sampling rate, unit, reference, and montage.
+For EEG datasets, `metadata.toml` must describe channel layout, channel types, channel order rules, channel count, sampling rate, unit, reference, and montage. Variable channel layouts must declare the Lance columns used to read per-subject or per-sample channel names and status.
 
 For MRI datasets, `metadata.toml` must describe image type, magnetic field strength, scanner information, voxel size, orientation, space, spatial axes, and affine handling.
 

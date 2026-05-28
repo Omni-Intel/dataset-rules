@@ -82,6 +82,13 @@ required = true
 nullable = false
 description = "Whether the sample passed quality control."
 
+[[schema.columns]]
+name = "channel_names"
+type = "list<string>"
+required = true
+nullable = false
+description = "Channel names in the order used by the restored EEG channel axis."
+
 [data]
 array_column = "data"
 dtype = "float32"
@@ -91,6 +98,18 @@ padding_value = 0.0
 shape_column = "shape"
 original_shape_column = "original_shape"
 valid_length_column = "valid_length"
+
+[eeg]
+n_channels = 1
+sampling_rate = 256.0
+sampling_rate_unit = "Hz"
+unit = "uV"
+reference = "unknown"
+montage = "unknown"
+channel_axis = 0
+time_axis = 1
+channel_layout = "per_subject"
+channel_names_column = "channel_names"
 
 [quality_control]
 qc_column = "qc_pass"

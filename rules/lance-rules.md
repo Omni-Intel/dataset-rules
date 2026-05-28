@@ -94,7 +94,18 @@ If non-default names are used, they MUST be declared in `metadata.toml`.
 start_time: float64
 duration: float64
 start_sample: int64
+channel_names: list<string>
+channel_status: list<string>
+channel_mask: list<bool>
 ```
+
+For variable EEG channel layouts, `metadata.toml` MUST declare which channel columns to read. When present:
+
+- `channel_names` MUST contain channel names in the order used by the restored data channel axis.
+- `channel_status` MUST align with `channel_names`.
+- `channel_mask` MUST align with the declared dataset-level channel universe when one exists; otherwise it MUST align with `channel_names`.
+
+For `channel_layout = "per_subject"`, subject-level channel metadata SHOULD be repeated on every sample row for that subject.
 
 ### MRI optional columns
 
@@ -129,4 +140,3 @@ label
 qc_pass
 split
 ```
-

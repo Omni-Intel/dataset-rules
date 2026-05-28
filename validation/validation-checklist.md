@@ -96,8 +96,14 @@ Unless an item is explicitly marked optional or recommended, every checklist ite
 ## EEG checks
 
 - [ ] `[eeg]` exists when `dataset.modality = "eeg"`.
-- [ ] `eeg.n_channels` equals the number of `[[eeg.channels]]` entries.
-- [ ] Channel indexes are contiguous and start from 0.
+- [ ] `eeg.channel_layout` exists and is one of `dataset_level`, `per_subject`, or `per_sample`.
+- [ ] If `eeg.channel_layout = "dataset_level"`, `eeg.n_channels` equals the number of `[[eeg.channels]]` entries.
+- [ ] If `[[eeg.channels]]` is present, channel indexes are contiguous and start from 0.
+- [ ] If `eeg.channel_layout` is `per_subject` or `per_sample`, `eeg.channel_names_column` exists and names a Lance column.
+- [ ] If `eeg.channel_status_column` is declared, it names a Lance column aligned with `eeg.channel_names_column`.
+- [ ] If `eeg.channel_mask_column` is declared, it names a Lance column aligned with the dataset-level channel universe or `eeg.channel_names_column`.
+- [ ] For `per_subject` or `per_sample`, each `channel_names_column` value is non-empty and matches the restored channel-axis order.
+- [ ] For `per_subject` or `per_sample`, `eeg.n_channels` is greater than or equal to every row's restored channel-axis length.
 - [ ] `eeg.sampling_rate` is positive.
 - [ ] `eeg.channel_axis` and `eeg.time_axis` are valid axes.
 

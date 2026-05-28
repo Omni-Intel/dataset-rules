@@ -3,8 +3,8 @@ dataset_id = "ds-hmc-eeg"
 table = "dataset.lance"
 
 [current]
-lance_version = 3
-dataset_version = "2026.05.20"
+lance_version = 4
+dataset_version = "2026.05.21"
 description = "Current validated release."
 
 [[versions]]
@@ -39,3 +39,14 @@ compatible_with_previous = true
 description = "Added original_shape and valid_length columns for reversible padding."
 affected_rows = 111890
 affected_columns = ["original_shape", "valid_length"]
+
+[[versions]]
+lance_version = 4
+dataset_version = "2026.05.21"
+created_at = "2026-05-21T10:00:00+08:00"
+author = "system"
+change_type = "schema_update"
+compatible_with_previous = true
+description = "Added per-subject EEG channel metadata columns."
+affected_rows = 111890
+affected_columns = ["channel_names", "channel_status", "channel_mask"]

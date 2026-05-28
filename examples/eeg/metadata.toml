@@ -4,9 +4,9 @@ spec_version = "0.1.0"
 dataset_id = "ds-hmc-eeg"
 name = "HMC Sleep EEG Dataset"
 modality = "eeg"
-version = "2026.05.20"
+version = "2026.05.21"
 created_at = "2026-05-20T10:00:00+08:00"
-updated_at = "2026-05-20T10:00:00+08:00"
+updated_at = "2026-05-21T10:00:00+08:00"
 sample_unit = "window"
 task_type = "classification"
 n_samples = 111890
@@ -118,6 +118,28 @@ nullable = true
 allowed_values = ["train", "val", "test"]
 description = "Dataset split."
 
+[[schema.columns]]
+name = "channel_names"
+type = "list<string>"
+required = true
+nullable = false
+description = "Channel names in the order used by the restored EEG channel axis."
+
+[[schema.columns]]
+name = "channel_status"
+type = "list<string>"
+required = false
+nullable = true
+allowed_values = ["good", "bad", "missing", "interpolated", "padded", "unknown"]
+description = "Per-channel status aligned with channel_names."
+
+[[schema.columns]]
+name = "channel_mask"
+type = "list<bool>"
+required = false
+nullable = true
+description = "Mask over the dataset-level EEG channel list."
+
 [data]
 array_column = "data"
 dtype = "float32"
@@ -137,6 +159,10 @@ reference = "linked_mastoids"
 montage = "10-20"
 channel_axis = 0
 time_axis = 1
+channel_layout = "per_subject"
+channel_names_column = "channel_names"
+channel_status_column = "channel_status"
+channel_mask_column = "channel_mask"
 line_frequency = 50.0
 highpass = 0.5
 lowpass = 45.0
