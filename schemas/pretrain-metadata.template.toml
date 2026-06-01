@@ -1,0 +1,246 @@
+spec_version = "0.1.0"
+
+[dataset]
+dataset_id = "ds-eeg-pretrain"
+name = "EEG Pretraining Dataset"
+modality = "eeg"
+version = "2026.05.30"
+created_at = "2026-05-30T00:00:00+00:00"
+updated_at = "2026-05-30T00:00:00+00:00"
+sample_unit = "window"
+task_type = "pretraining"
+n_samples = 0
+n_subjects = 0
+
+[storage]
+table_name = "__partitioned__"
+lance_path = "__partitioned__"
+path_type = "relative"
+root_path = "."
+backend = "local"
+uri = ""
+
+[schema]
+primary_key = ["table_id", "sample_id"]
+data_column = "data"
+
+[[schema.columns]]
+name = "sample_id"
+type = "string"
+required = true
+nullable = false
+description = "Stable sample identifier unique within table_id for partitioned pretraining datasets."
+
+[[schema.columns]]
+name = "table_id"
+type = "string"
+required = true
+nullable = false
+description = "Physical signal table identifier matching [[pretrain.tables]].table_id."
+
+[[schema.columns]]
+name = "sample_uid"
+type = "string"
+required = false
+nullable = true
+description = "Optional globally unique sample key derived from table_id and sample_id."
+
+[[schema.columns]]
+name = "subject_id"
+type = "string"
+required = true
+nullable = false
+description = "Source-scoped subject identifier."
+
+[[schema.columns]]
+name = "modality"
+type = "string"
+required = true
+nullable = false
+allowed_values = ["eeg"]
+description = "Data modality."
+
+[[schema.columns]]
+name = "data"
+type = "fixed_size_list<float32>"
+required = true
+nullable = false
+description = "Flattened padded EEG signal."
+
+[[schema.columns]]
+name = "shape"
+type = "list<int32>"
+required = true
+nullable = false
+description = "Padded signal shape."
+
+[[schema.columns]]
+name = "original_shape"
+type = "list<int32>"
+required = true
+nullable = false
+description = "Original signal shape before padding."
+
+[[schema.columns]]
+name = "valid_length"
+type = "int64"
+required = true
+nullable = false
+description = "Valid flattened signal length before padding."
+
+[[schema.columns]]
+name = "qc_pass"
+type = "bool"
+required = true
+nullable = false
+description = "Quality control flag."
+
+[[schema.columns]]
+name = "source_dataset_id"
+type = "string"
+required = true
+nullable = false
+description = "Source dataset identifier."
+
+[[schema.columns]]
+name = "recording_id"
+type = "string"
+required = true
+nullable = false
+description = "Stable recording identifier within the source dataset."
+
+[[schema.columns]]
+name = "source_path"
+type = "string"
+required = true
+nullable = false
+description = "Relative source file path or source URI."
+
+[[schema.columns]]
+name = "start_time"
+type = "float64"
+required = true
+nullable = false
+unit = "s"
+description = "Window start time in seconds."
+
+[[schema.columns]]
+name = "duration"
+type = "float64"
+required = true
+nullable = false
+unit = "s"
+description = "Window duration in seconds."
+
+[[schema.columns]]
+name = "split"
+type = "string"
+required = true
+nullable = false
+allowed_values = ["train", "val", "test"]
+description = "Pretraining split."
+
+[[schema.columns]]
+name = "preprocess_version"
+type = "string"
+required = true
+nullable = false
+description = "Preprocessing pipeline version."
+
+[[schema.columns]]
+name = "channel_profile"
+type = "string"
+required = true
+nullable = false
+description = "Channel profile identifier."
+
+[[schema.columns]]
+name = "channel_names"
+type = "list<string>"
+required = true
+nullable = false
+description = "Channel names aligned with the restored EEG channel axis."
+
+[[schema.columns]]
+name = "channel_mask"
+type = "list<bool>"
+required = true
+nullable = false
+description = "Mask over the channel profile slots."
+
+[[schema.columns]]
+name = "sample_weight"
+type = "float32"
+required = false
+nullable = true
+description = "Optional sampler weight used when referenced by pretraining sampling metadata."
+
+[data]
+array_column = "data"
+dtype = "float32"
+axis_order = ["channel", "time"]
+padding = true
+padding_value = 0.0
+shape_column = "shape"
+original_shape_column = "original_shape"
+valid_length_column = "valid_length"
+
+[eeg]
+n_channels = 1
+sampling_rate = 200.0
+sampling_rate_unit = "Hz"
+unit = "uV"
+reference = "unknown"
+montage = "unknown"
+channel_axis = 0
+time_axis = 1
+channel_layout = "per_sample"
+channel_names_column = "channel_names"
+channel_mask_column = "channel_mask"
+window_length = 10.0
+window_length_unit = "s"
+
+[quality_control]
+qc_column = "qc_pass"
+qc_pass_values = [true, false]
+
+[pretrain]
+pretrain_type = "self_supervised"
+sample_id_scope = "table_local"
+sample_key_columns = ["table_id", "sample_id"]
+sample_uid_column = "sample_uid"
+source_dataset_column = "source_dataset_id"
+recording_id_column = "recording_id"
+preprocess_version = "preprocess-v1"
+split_policy = "recording_disjoint"
+sampling_policy = "balanced_by_source"
+
+[pretrain.sampling]
+policy = "balanced_by_source"
+source_weighting = "temperature"
+temperature = 0.5
+weight_column = "sample_weight"
+
+[[pretrain.sources]]
+source_dataset_id = "source-1"
+source_family = "example"
+version = "snapshot-YYYY.MM.DD"
+license = "unknown"
+access_level = "unknown"
+n_samples = 0
+
+[[pretrain.channel_profiles]]
+profile_id = "profile-1"
+n_channels = 1
+layout = "fixed_slot"
+channel_mask_column = "channel_mask"
+
+[[pretrain.tables]]
+table_id = "source_1_train"
+role = "signal"
+lance_path = "dataset.lance"
+split = "train"
+source_family = "example"
+source_dataset_id = "source-1"
+channel_profile = "profile-1"
+n_samples = 0

@@ -16,10 +16,10 @@
 
 ### MUST
 
-- 数据集 MUST 包含 `dataset.lance/`。
+- 默认下游数据集 MUST 包含 `dataset.lance/`。
 - 数据集 MUST 包含 `metadata.toml`。
-- 除非在 `metadata.toml` 中另行声明，`dataset.lance/` MUST 是默认主 Lance 表名称。
-- `metadata.toml` MUST 足以让程序从 `dataset.lance` 解析并恢复数据。
+- 除非扩展规则在 `metadata.toml` 中声明不同布局，`dataset.lance/` MUST 是默认主 Lance 表名称。
+- `metadata.toml` MUST 足以让程序从 canonical signal table 解析并恢复数据。对于分区预训练数据集，这表示从 `[[pretrain.tables]]` 解析 signal 表。
 
 ### SHOULD
 
@@ -51,6 +51,8 @@
 ## 4. 单模态规则
 
 对于当前单模态数据集，优先使用一个 `dataset.lance/` 表。该表 SHOULD 存储样本级数据、标签、ID、形状元数据、QC 标记和数据划分。
+
+预训练数据集在可行时 SHOULD 遵循该默认布局。如果规模、source 分离、channel profile 或 feature view 需要多个物理表，则 MUST 遵循 `pretrain-dataset-rules.md` 中的分区布局规则。
 
 ## 5. 多模态扩展规则
 

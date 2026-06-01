@@ -14,7 +14,7 @@ The specification is designed for EEG, MRI, fMRI, and future multimodal datasets
 
 ## Core principles
 
-1. `dataset.lance` stores sample-level data, labels, IDs, shapes, QC fields, and splits.
+1. `dataset.lance` stores sample-level data, labels, IDs, shapes, QC fields, and splits for default downstream datasets; partitioned pretraining datasets declare their signal tables in `metadata.toml`.
 2. `metadata.toml` stores structured details required to parse, restore, validate, and train on the Lance table.
 3. `versions.toml` maps Lance internal versions to human-readable semantic changes.
 4. `description.toml` is optional and only describes dataset overview, collection background, processing summary, intended use, limitations, and citations.
@@ -24,7 +24,7 @@ The specification is designed for EEG, MRI, fMRI, and future multimodal datasets
 
 | File | Required | Purpose |
 |---|---:|---|
-| `dataset.lance/` | Yes | Main sample-level Lance table |
+| `dataset.lance/` | Yes for default/downstream datasets | Main sample-level Lance table. Partitioned pretraining datasets use declared signal tables instead. |
 | `metadata.toml` | Yes | Machine-readable schema, modality metadata, labels, padding, QC, split rules |
 | `versions.toml` | Recommended | Lance version changelog |
 | `description.toml` | No | Human-readable dataset overview and processing notes |
@@ -36,6 +36,7 @@ The specification is designed for EEG, MRI, fMRI, and future multimodal datasets
 | Dataset layout | [dataset-layout-rules.md](rules/dataset-layout-rules.md) | [dataset-layout-rules.cn.md](rules/dataset-layout-rules.cn.md) |
 | Lance table | [lance-rules.md](rules/lance-rules.md) | [lance-rules.cn.md](rules/lance-rules.cn.md) |
 | Metadata | [metadata-rules.md](rules/metadata-rules.md) | [metadata-rules.cn.md](rules/metadata-rules.cn.md) |
+| Pretraining datasets | [pretrain-dataset-rules.md](rules/pretrain-dataset-rules.md) | [pretrain-dataset-rules.cn.md](rules/pretrain-dataset-rules.cn.md) |
 | Versioning | [version-rules.md](rules/version-rules.md) | [version-rules.cn.md](rules/version-rules.cn.md) |
 | Description | [description-rules.md](rules/description-rules.md) | [description-rules.cn.md](rules/description-rules.cn.md) |
 | Validation checklist | [validation-checklist.md](validation/validation-checklist.md) | - |
@@ -45,9 +46,10 @@ The specification is designed for EEG, MRI, fMRI, and future multimodal datasets
 1. [Dataset layout rules](rules/dataset-layout-rules.md) / [中文](rules/dataset-layout-rules.cn.md)
 2. [Lance table rules](rules/lance-rules.md) / [中文](rules/lance-rules.cn.md)
 3. [Metadata rules](rules/metadata-rules.md) / [中文](rules/metadata-rules.cn.md)
-4. [Version rules](rules/version-rules.md) / [中文](rules/version-rules.cn.md)
-5. [Description rules](rules/description-rules.md) / [中文](rules/description-rules.cn.md)
-6. [Validation checklist](validation/validation-checklist.md)
+4. [Pretraining dataset rules](rules/pretrain-dataset-rules.md) / [中文](rules/pretrain-dataset-rules.cn.md), when `dataset.task_type = "pretraining"`
+5. [Version rules](rules/version-rules.md) / [中文](rules/version-rules.cn.md)
+6. [Description rules](rules/description-rules.md) / [中文](rules/description-rules.cn.md)
+7. [Validation checklist](validation/validation-checklist.md)
 
 ## Current default schema
 
@@ -88,6 +90,7 @@ Example TOML files are provided under:
 
 ```text
 examples/eeg/
+examples/pretrain-eeg/
 examples/mri/
 examples/fmri/
 ```

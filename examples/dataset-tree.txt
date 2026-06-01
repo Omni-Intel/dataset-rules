@@ -3,3 +3,15 @@ ds-example/
   metadata.toml
   versions.toml
   description.toml
+
+ds-eeg-pretrain-example/
+  metadata.toml
+  versions.toml
+  description.toml
+  tables/
+    signal/
+      tuh_train.lance/
+      openneuro_ds004395_slot136_train.lance/
+    features/
+      npd_v1/
+        openneuro_ds004395_slot136_train.lance/

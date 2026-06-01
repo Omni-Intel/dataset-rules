@@ -1,0 +1,37 @@
+spec_version = "0.1.0"
+dataset_id = "ds-eeg-pretrain-example"
+table = "__partitioned__"
+
+[current]
+lance_version = 1
+dataset_version = "2026.05.30"
+description = "Current validated partitioned pretraining release."
+
+[[versions]]
+lance_version = 1
+dataset_version = "2026.05.30"
+created_at = "2026-05-30T00:00:00+00:00"
+author = "system"
+change_type = "initial_import"
+compatible_with_previous = false
+description = "Initial EEG pretraining conversion with TUH and OpenNeuro-style source declarations."
+affected_rows = 9412029
+affected_columns = [
+  "sample_id",
+  "table_id",
+  "sample_uid",
+  "subject_id",
+  "source_dataset_id",
+  "recording_id",
+  "source_path",
+  "start_time",
+  "duration",
+  "split",
+  "preprocess_version",
+  "channel_profile",
+  "data",
+  "shape",
+  "original_shape",
+  "valid_length",
+  "qc_pass",
+]

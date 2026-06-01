@@ -1,0 +1,31 @@
+[overview]
+title = "EEG Pretraining Example"
+summary = "A partitioned EEG pretraining dataset example combining TUH-style and OpenNeuro-style sources."
+modality = "eeg"
+task = "self_supervised_pretraining"
+
+[collection]
+source = "TUH and OpenNeuro-style source datasets"
+population = "Mixed EEG cohorts"
+collection_period = "unknown"
+institution = "multiple"
+
+[processing_summary]
+description = "Raw EEG recordings were segmented into 10-second windows, normalized, padded, and stored as Lance signal tables with source and recording metadata."
+window_sec = 10.0
+normalization = "clip_and_divide_by_200"
+label_mapping = "No label is required for the default self-supervised pretraining objective."
+
+[intended_use]
+tasks = ["self_supervised_pretraining", "representation_learning"]
+recommended_split = "Use the row-level split column declared in metadata.toml."
+
+[limitations]
+notes = [
+  "This is a schema example; source licenses and exact cohort details must be filled from the real source snapshots.",
+  "Cross-source training should use the declared channel_profile and channel_mask columns.",
+  "Sampling probabilities should follow [pretrain.sampling] when row counts are not intended to define training probability."
+]
+
+[citation]
+text = "Please cite the original source datasets and this converted pretraining release."
