@@ -102,6 +102,9 @@ Unless an item is explicitly marked optional or recommended, every checklist ite
 - [ ] If `eeg.channel_layout` is `per_subject` or `per_sample`, `eeg.channel_names_column` exists and names a Lance column.
 - [ ] If `eeg.channel_status_column` is declared, it names a Lance column aligned with `eeg.channel_names_column`.
 - [ ] If `eeg.channel_mask_column` is declared, it names a Lance column aligned with the dataset-level channel universe or `eeg.channel_names_column`.
+- [ ] `channel_mask` and `bad_channel_mask` exist with length C.
+- [ ] `sum(channel_mask) == original_shape[0]`.
+- [ ] If `channel_counts` exists, `channel_counts == sum(channel_mask)`.
 - [ ] For `per_subject` or `per_sample`, each `channel_names_column` value is non-empty and matches the restored channel-axis order.
 - [ ] For `per_subject` or `per_sample`, `eeg.n_channels` is greater than or equal to every row's restored channel-axis length.
 - [ ] `eeg.sampling_rate` is positive.
