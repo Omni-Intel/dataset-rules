@@ -1,5 +1,5 @@
 [overview]
-title = "OpenNeuro ds003690 — EEG pretraining shard"
+title = "OpenNeuro ds003690 — EEG pretraining dataset"
 summary = "An OpenNeuro EEG dataset converted into the pretrain profile (unlabeled, single table, NPD features)."
 modality = "eeg"
 task = "self_supervised_pretraining"
