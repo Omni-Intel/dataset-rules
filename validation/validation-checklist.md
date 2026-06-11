@@ -101,10 +101,10 @@ Unless an item is explicitly marked optional or recommended, every checklist ite
 - [ ] If `[[eeg.channels]]` is present, channel indexes are contiguous and start from 0.
 - [ ] If `eeg.channel_layout` is `per_subject` or `per_sample`, `eeg.channel_names_column` exists and names a Lance column.
 - [ ] If `eeg.channel_status_column` is declared, it names a Lance column aligned with `eeg.channel_names_column`.
-- [ ] If `eeg.channel_mask_column` is declared, it names a Lance column aligned with the dataset-level channel universe or `eeg.channel_names_column`.
-- [ ] `channel_mask` and `bad_channel_mask` exist with length C.
-- [ ] `sum(channel_mask) == original_shape[0]`.
-- [ ] If `channel_counts` exists, `channel_counts == sum(channel_mask)`.
+- [ ] If `eeg.channel_mask_column` is declared, it names a Lance column aligned with the dataset-level channel universe or `eeg.channel_names_column`; mask values have length C.
+- [ ] If `eeg.channel_mask_column` is declared, `sum(channel_mask)` equals the restored channel-axis length.
+- [ ] If `eeg.bad_channel_mask_column` is declared, it names a Lance column with length C and aligns with `eeg.channel_mask_column` when present.
+- [ ] If `channel_counts` and `channel_mask` both exist, `channel_counts == sum(channel_mask)`.
 - [ ] For `per_subject` or `per_sample`, each `channel_names_column` value is non-empty and matches the restored channel-axis order.
 - [ ] For `per_subject` or `per_sample`, `eeg.n_channels` is greater than or equal to every row's restored channel-axis length.
 - [ ] `eeg.sampling_rate` is positive.
@@ -136,7 +136,8 @@ Applies when `metadata.toml` declares `profile = "pretrain"`. These checks are i
 - [ ] The dataset is stored as a single table; datasets are not merged into channel-count buckets.
 - [ ] If `split` is present, every value is in `["train", "val"]`; train and val are not stored as separate tables.
 - [ ] `electrode_ids` and `channel_names` both exist, are non-null, and have equal length C in every row.
-- [ ] `channel_mask` and `bad_channel_mask` exist with length C; `sum(channel_mask) == channel_counts == original_shape[0]`.
+- [ ] `channel_mask` and `bad_channel_mask` exist with length C; `sum(channel_mask) == original_shape[0]`.
+- [ ] If `channel_counts` exists, `channel_counts == sum(channel_mask)`.
 - [ ] Padding slots satisfy `electrode_ids == pad_electrode_id` (default 0) and `channel_mask == false`.
 - [ ] `electrode_ids` values are within the shared vocab range (reserved ids 0 and 1 allowed).
 - [ ] `[eeg]` declares `electrode_ids_column`, `channel_names_column`, `channel_mask_column`, and `bad_channel_mask_column`.

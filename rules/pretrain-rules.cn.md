@@ -134,7 +134,7 @@ time_padding = false
 
 - `[label]` MUST NOT 出现。`dataset.task_type` MUST 为 `"pretrain"`。
 - `[pretrain]` MUST 出现（取代 `[label]`）。
-- 若提供 NPD 特征，`[features.npd]` MUST 出现。
+- 若提供 NPD 特征，`[features.npd]` MUST 出现并设置 `present = true`。未提供 NPD 特征时，`[features.npd]` MAY 以 `present = false` 的形式出现。
 - `[preprocessing]` SHOULD 出现。
 
 ### `[pretrain]`
@@ -185,6 +185,10 @@ time_padding = false
 | `unit` | string | Yes | 通道单位 |
 
 ### `[features.npd]`
+
+本节 MAY 以 `present = false` 显式声明 NPD 特征不存在。若 `present = true`，或实际存在
+NPD 特征，则下列必需字段 MUST 出现，且 `derivatives/features/npd.lance/` MUST 满足
+NPD 派生表规则。
 
 | Field | Type | Required | 说明 |
 |---|---|---:|---|

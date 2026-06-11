@@ -12,6 +12,7 @@
 - Pretrain profile: one table per dataset (no channel-count bucketing), unlabeled (`[pretrain]` replaces `[label]`), required `electrode_ids` + `channel_names` over a shared electrode vocab, slot-mask channel padding, and standardized NPD features under `derivatives/features/npd.lance`.
 - Adds `examples/eeg-pretrain/` and `schemas/pretrain.metadata.template.toml`.
 - Adds Pretrain profile checks to `validation/validation-checklist.md` and the `feature_update` change type.
+- Clarifies conditional EEG/pretrain validation checks, supervised label schema declarations, and optional `[features.npd]` declarations when NPD features are absent.
 
 ## 0.1.0
 

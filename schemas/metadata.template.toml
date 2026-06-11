@@ -83,6 +83,20 @@ nullable = false
 description = "Whether the sample passed quality control."
 
 [[schema.columns]]
+name = "label"
+type = "int32"
+required = true
+nullable = false
+description = "Primary label."
+
+[[schema.columns]]
+name = "label_name"
+type = "string"
+required = false
+nullable = true
+description = "Human-readable label."
+
+[[schema.columns]]
 name = "channel_names"
 type = "list<string>"
 required = true

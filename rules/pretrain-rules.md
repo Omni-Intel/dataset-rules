@@ -138,7 +138,7 @@ Base: `metadata-rules.md`.
 
 - `[label]` MUST NOT appear. `dataset.task_type` MUST be `"pretrain"`.
 - `[pretrain]` MUST appear (it replaces `[label]`).
-- `[features.npd]` MUST appear if NPD features are provided.
+- `[features.npd]` MUST appear with `present = true` if NPD features are provided. It MAY appear with `present = false` when NPD features are not provided.
 - `[preprocessing]` SHOULD appear.
 
 ### `[pretrain]`
@@ -189,6 +189,10 @@ In addition to the base required EEG fields, the pretrain profile requires:
 | `unit` | string | Yes | Channel unit |
 
 ### `[features.npd]`
+
+This section MAY appear with `present = false` to explicitly declare that NPD features are absent. If
+`present = true`, or if NPD features exist, all required fields below MUST be present and
+`derivatives/features/npd.lance/` MUST satisfy the NPD derivative table rules.
 
 | Field | Type | Required | Description |
 |---|---|---:|---|

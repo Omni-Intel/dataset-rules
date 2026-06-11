@@ -56,6 +56,7 @@ split_update
 schema_update
 metadata_update
 preprocessing_update
+feature_update
 migration
 release
 rollback

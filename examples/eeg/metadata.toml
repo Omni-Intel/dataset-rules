@@ -92,8 +92,8 @@ description = "Valid flattened length before padding."
 [[schema.columns]]
 name = "label"
 type = "int32"
-required = false
-nullable = true
+required = true
+nullable = false
 description = "Sleep stage label."
 
 [[schema.columns]]

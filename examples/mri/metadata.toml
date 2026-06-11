@@ -85,9 +85,16 @@ description = "Flattened 4x4 affine matrix."
 [[schema.columns]]
 name = "label"
 type = "int32"
+required = true
+nullable = false
+description = "Primary label."
+
+[[schema.columns]]
+name = "label_name"
+type = "string"
 required = false
 nullable = true
-description = "Primary label."
+description = "Human-readable label."
 
 [[schema.columns]]
 name = "qc_pass"
@@ -95,6 +102,14 @@ type = "bool"
 required = true
 nullable = false
 description = "Quality control flag."
+
+[[schema.columns]]
+name = "split"
+type = "string"
+required = false
+nullable = true
+allowed_values = ["train", "val", "test"]
+description = "Dataset split."
 
 [data]
 array_column = "data"

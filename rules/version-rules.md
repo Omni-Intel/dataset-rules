@@ -56,6 +56,7 @@ split_update
 schema_update
 metadata_update
 preprocessing_update
+feature_update
 migration
 release
 rollback
@@ -106,4 +107,3 @@ description = "Added original_shape and valid_length for reversible padding."
 affected_rows = 111890
 affected_columns = ["original_shape", "valid_length"]
 ```
-
