@@ -137,7 +137,7 @@ Applies when `metadata.toml` declares `profile = "pretrain"`. These checks are i
 - [ ] If `split` is present, every value is in `["train", "val"]`; train and val are not stored as separate tables.
 - [ ] `electrode_ids` and `channel_names` both exist, are non-null, and have equal length C in every row.
 - [ ] `channel_mask` and `bad_channel_mask` exist with length C; `sum(channel_mask) == channel_counts == original_shape[0]`.
-- [ ] Padding slots satisfy `electrode_id == pad_electrode_id` (default 0) and `channel_mask == false`.
+- [ ] Padding slots satisfy `electrode_ids == pad_electrode_id` (default 0) and `channel_mask == false`.
 - [ ] `electrode_ids` values are within the shared vocab range (reserved ids 0 and 1 allowed).
 - [ ] `[eeg]` declares `electrode_ids_column`, `channel_names_column`, `channel_mask_column`, and `bad_channel_mask_column`.
 - [ ] `valid_length == n_valid_channels * T` (declared, not `C * T`); `[data].time_padding = false`; T is constant within the dataset.
