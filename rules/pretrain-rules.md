@@ -75,7 +75,7 @@ The pretrain profile **promotes the following EEG columns from optional to requi
 - `electrode_ids` and `channel_names` describe the same fact (which electrode occupies slot `i`) and MUST
   have equal length C and identical order.
 - `label` and `label_name` columns MUST NOT be present.
-- The signal column MUST be named `data`. A legacy `signals` column MUST be renamed to `data` or declared as an alias in `[storage]`/`[schema]`.
+- The signal column MUST be named `data`. A legacy `signals` column MUST be renamed to `data` before release.
 
 Recommended columns (SHOULD when applicable):
 `split, session_id, run_id, source_path, start_time, channel_counts, montage_id, channel_status,
