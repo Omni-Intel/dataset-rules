@@ -1,0 +1,193 @@
+spec_version = "0.1.0"
+profile = "pretrain"
+
+[dataset]
+dataset_id = "ds-example-pretrain"
+name = "Example Pretrain Dataset"
+modality = "eeg"
+version = "2026.06.09"
+created_at = "2026-06-09T10:00:00+08:00"
+updated_at = "2026-06-09T10:00:00+08:00"
+sample_unit = "window"
+task_type = "pretrain"
+n_samples = 0
+n_subjects = 0
+source = "openneuro"
+
+[storage]
+table_name = "dataset.lance"
+lance_path = "dataset.lance"
+path_type = "relative"
+root_path = "."
+backend = "local"
+uri = ""
+
+[schema]
+primary_key = "sample_id"
+data_column = "data"
+# pretrain datasets are unlabeled: no label_column
+
+[[schema.columns]]
+name = "sample_id"
+type = "string"
+required = true
+nullable = false
+description = "Unique sample identifier within the dataset."
+
+[[schema.columns]]
+name = "subject_id"
+type = "string"
+required = true
+nullable = false
+description = "Subject identifier."
+
+[[schema.columns]]
+name = "modality"
+type = "string"
+required = true
+nullable = false
+allowed_values = ["eeg"]
+description = "Data modality."
+
+[[schema.columns]]
+name = "data"
+type = "fixed_size_list<float32>"
+required = true
+nullable = false
+shape = ["n_channels", "n_times"]
+description = "Flattened padded EEG signal, logical shape (C, T)."
+
+[[schema.columns]]
+name = "shape"
+type = "list<int32>"
+required = true
+nullable = false
+description = "Padded shape [C, T]."
+
+[[schema.columns]]
+name = "original_shape"
+type = "list<int32>"
+required = true
+nullable = false
+description = "Restored shape [n_valid_channels, T]."
+
+[[schema.columns]]
+name = "valid_length"
+type = "int64"
+required = true
+nullable = false
+description = "n_valid_channels * T (declared, not C*T)."
+
+[[schema.columns]]
+name = "qc_pass"
+type = "bool"
+required = true
+nullable = false
+description = "Quality control flag."
+
+[[schema.columns]]
+name = "electrode_ids"
+type = "fixed_size_list<uint16>"
+required = true
+nullable = false
+description = "Shared vocab electrode id per slot; 0=pad, 1=UNK_EEG."
+
+[[schema.columns]]
+name = "channel_names"
+type = "list<string>"
+required = true
+nullable = false
+description = "Canonical channel name per slot, aligned with electrode_ids."
+
+[[schema.columns]]
+name = "channel_mask"
+type = "fixed_size_list<bool>"
+required = true
+nullable = false
+description = "True for valid (non-padding) slots."
+
+[[schema.columns]]
+name = "bad_channel_mask"
+type = "fixed_size_list<bool>"
+required = true
+nullable = false
+description = "True for bad channels within valid slots."
+
+[[schema.columns]]
+name = "split"
+type = "string"
+required = false
+nullable = true
+allowed_values = ["train", "val"]
+description = "Dataset split."
+
+[data]
+array_column = "data"
+dtype = "float32"
+axis_order = ["channel", "time"]
+padding = true
+padding_value = 0.0
+shape_column = "shape"
+original_shape_column = "original_shape"
+valid_length_column = "valid_length"
+channel_padding = "slot_mask"
+channel_mask_column = "channel_mask"
+time_padding = false
+
+[preprocessing]
+target_sfreq = 200.0
+window_seconds = 10.0
+segment_samples = 2000
+bandpass_low = 0.3
+bandpass_high = 75.0
+notch_hz = 50.0
+unit_before_normalization = "uV"
+normalization = "clip_divide_200"
+normalization_detail = "x_uV / 200, then clip to [-1, 1]"
+channel_canonicalization = "uppercase; strip 'EEG ' prefix; alias-merge; drop aux; map to foundation vocab"
+
+[eeg]
+n_channels = 1
+sampling_rate = 200.0
+sampling_rate_unit = "Hz"
+unit = "normalized"
+reference = "unknown"
+montage = "unknown"
+channel_axis = 0
+time_axis = 1
+channel_layout = "per_sample"
+electrode_ids_column = "electrode_ids"
+channel_names_column = "channel_names"
+channel_mask_column = "channel_mask"
+bad_channel_mask_column = "bad_channel_mask"
+electrode_vocab_name = "foundation_electrode_vocab"
+electrode_vocab_version = "1"
+electrode_vocab_path = "derivatives/electrode_vocab.json"
+pad_electrode_id = 0
+unk_electrode_id = 1
+
+[quality_control]
+qc_column = "qc_pass"
+qc_pass_values = [true, false]
+qc_method = "unknown"
+
+[pretrain]
+is_labeled = false
+recommended_pretext = ["masked_reconstruction", "jepa", "cwt_time_freq"]
+
+[features.npd]
+present = false
+table_name = "derivatives/features/npd.lance"
+lance_path = "derivatives/features/npd.lance"
+row_alignment = "sample_id"
+extractor = "unknown"
+extractor_version = "unknown"
+channel_feature_dim = 0
+segment_feature_dim = 0
+manual_feature_dim = 0
+channel_feature_axis_order = ["channel", "feature"]
+signal_already_normalized = true
+
+[split]
+split_column = "split"
+allowed_values = ["train", "val"]

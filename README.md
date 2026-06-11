@@ -29,6 +29,13 @@ The specification is designed for EEG, MRI, fMRI, and future multimodal datasets
 | `versions.toml` | Recommended | Lance version changelog |
 | `description.toml` | No | Human-readable dataset overview and processing notes |
 
+## Profiles
+
+The specification has two profiles that share the same layout, Lance, metadata, version, and description rules:
+
+- **base** (default): supervised / downstream datasets. A `[label]` section is required when the dataset is supervised. This is the profile assumed by the core rule documents.
+- **pretrain**: self-supervised EEG pretraining corpora. Datasets are unlabeled, stored one table per dataset (OpenNeuro ships many datasets), carry both `electrode_ids` and `channel_names`, use slot-mask channel padding, and standardize NPD features under `derivatives/features/npd.lance`. A dataset selects this profile with `profile = "pretrain"` at the top of `metadata.toml`. See [pretrain-rules.md](rules/pretrain-rules.md).
+
 ## Rules navigation
 
 | Topic | English | Chinese |
@@ -38,6 +45,7 @@ The specification is designed for EEG, MRI, fMRI, and future multimodal datasets
 | Metadata | [metadata-rules.md](rules/metadata-rules.md) | [metadata-rules.cn.md](rules/metadata-rules.cn.md) |
 | Versioning | [version-rules.md](rules/version-rules.md) | [version-rules.cn.md](rules/version-rules.cn.md) |
 | Description | [description-rules.md](rules/description-rules.md) | [description-rules.cn.md](rules/description-rules.cn.md) |
+| Pretrain profile | [pretrain-rules.md](rules/pretrain-rules.md) | [pretrain-rules.cn.md](rules/pretrain-rules.cn.md) |
 | Validation checklist | [validation-checklist.md](validation/validation-checklist.md) | - |
 
 ## Recommended reading order
@@ -47,7 +55,8 @@ The specification is designed for EEG, MRI, fMRI, and future multimodal datasets
 3. [Metadata rules](rules/metadata-rules.md) / [中文](rules/metadata-rules.cn.md)
 4. [Version rules](rules/version-rules.md) / [中文](rules/version-rules.cn.md)
 5. [Description rules](rules/description-rules.md) / [中文](rules/description-rules.cn.md)
-6. [Validation checklist](validation/validation-checklist.md)
+6. [Pretrain profile rules](rules/pretrain-rules.md) / [中文](rules/pretrain-rules.cn.md)
+7. [Validation checklist](validation/validation-checklist.md)
 
 ## Current default schema
 
@@ -90,6 +99,7 @@ Example TOML files are provided under:
 examples/eeg/
 examples/mri/
 examples/fmri/
+examples/eeg-pretrain/   # pretrain profile (unlabeled EEG, one table per dataset, NPD features)
 ```
 
 ## Versioning
