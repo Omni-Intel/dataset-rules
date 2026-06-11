@@ -72,7 +72,7 @@ profile = "pretrain"
 
 - `electrode_ids` 与 `channel_names` 描述同一事实（第 `i` 槽位是哪个电极），二者 MUST 长度均为 C、顺序一致。
 - `label` / `label_name` 列 MUST NOT 出现。
-- 信号列 MUST 命名为 `data`；遗留的 `signals` 列 MUST 重命名为 `data` 或在 `[storage]`/`[schema]` 中声明别名。
+- 信号列 MUST 命名为 `data`；遗留的 `signals` 列 MUST 在发布前重命名为 `data`。
 
 推荐列（适用时 SHOULD）：
 `split, session_id, run_id, source_path, start_time, channel_counts, montage_id, channel_status,
