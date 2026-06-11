@@ -1,0 +1,36 @@
+[overview]
+title = "OpenNeuro ds003690 — EEG pretraining dataset"
+summary = "An OpenNeuro EEG dataset converted into the pretrain profile (unlabeled, single table, NPD features)."
+modality = "eeg"
+task = "self_supervised_pretraining"
+
+[collection]
+source = "openneuro"
+dataset_doi = "10.18112/openneuro.ds003690.v1.0.0"
+name = "EEG, ECG and pupil data from young and older adults: rest and auditory cued reaction time tasks"
+authors = ["Maria J. Ribeiro", "Miguel Castelo-Branco"]
+license = "CC0"
+population = "Young and older adults"
+collection_period = "unknown"
+institution = "unknown"
+
+[processing_summary]
+description = "Recordings were resampled to 200 Hz, bandpass 0.3-75 Hz, notch 50 Hz, segmented into fixed 10 s windows, channels canonicalized to a shared foundation electrode vocab and padded to c_max slots, then converted to padded Lance rows."
+window_sec = 10.0
+target_sfreq = 200.0
+normalization = "clip_divide_200 (x_uV / 200, clip to [-1, 1])"
+channel_canonicalization = "uppercase; strip 'EEG ' prefix; alias-merge; drop aux; map to foundation electrode_vocab.json"
+
+[intended_use]
+tasks = ["representation_learning", "pretraining"]
+recommended_split = "Use the split column in dataset.lance (train/val)."
+
+[limitations]
+notes = [
+  "Unlabeled corpus; intended for self-supervised pretraining only.",
+  "Channel coverage varies by recording; check electrode_ids / channel_mask before cross-dataset training.",
+  "Signal is already normalized (clip_divide_200); do not re-normalize blindly."
+]
+
+[citation]
+text = "Ribeiro M.J. and Castelo-Branco M. 2019, Neurobiology of Aging 73:177-189 (DOI 10.1016/j.neurobiolaging.2018.09.028). Please also cite OpenNeuro ds003690 and this converted release."
