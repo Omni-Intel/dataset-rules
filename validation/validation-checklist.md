@@ -123,6 +123,25 @@ Unless an item is explicitly marked optional or recommended, every checklist ite
 - [ ] `fmri.time_axis` is valid.
 - [ ] Preprocessing status fields exist.
 
+## Pretrain profile checks
+
+Applies when `metadata.toml` declares `profile = "pretrain"`. These checks are in addition to the base checks above; the label checks are replaced by the no-label checks below.
+
+- [ ] `profile = "pretrain"` and `dataset.task_type = "pretrain"`.
+- [ ] `[pretrain]` exists and `pretrain.is_labeled = false`.
+- [ ] `[label]` is absent and there is no `label` or `label_name` column.
+- [ ] The dataset is stored as a single table; datasets are not merged into channel-count buckets.
+- [ ] If `split` is present, every value is in `["train", "val"]`; train and val are not stored as separate tables.
+- [ ] `electrode_ids` and `channel_names` both exist, are non-null, and have equal length C in every row.
+- [ ] `channel_mask` and `bad_channel_mask` exist with length C; `sum(channel_mask) == channel_counts == original_shape[0]`.
+- [ ] Padding slots satisfy `electrode_id == pad_electrode_id` (default 0) and `channel_mask == false`.
+- [ ] `electrode_ids` values are within the shared vocab range (reserved ids 0 and 1 allowed).
+- [ ] `[eeg]` declares `electrode_ids_column`, `channel_names_column`, `channel_mask_column`, and `bad_channel_mask_column`.
+- [ ] `valid_length == n_valid_channels * T` (declared, not `C * T`); `[data].time_padding = false`; T is constant within the dataset.
+- [ ] `[data].channel_padding = "slot_mask"` and `channel_mask_column` names an existing column.
+- [ ] If `eeg.electrode_vocab_path` is declared, the referenced `derivatives/electrode_vocab.json` exists.
+- [ ] If `[features.npd].present = true`: `derivatives/features/npd.lance/` exists; its row count equals the main table; its `sample_id` set equals the main table; `channel_features` length `== C * channel_feature_dim`; `segment_features` length `== segment_feature_dim`; `manual_features` length `== manual_feature_dim`.
+
 ## Pre-upload object storage checks
 
 - [ ] The upload payload contains the validated `dataset.lance/`, `metadata.toml`, and `versions.toml` unless version tracking is explicitly disabled.
